@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - TechShop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #6c757d;
+        }
+
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin: 5px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .team-avatar {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="main.html" style="color: white; text-decoration: none;">📱 TechShop</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="main.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="user-info">
+                <span id="currentUser">Welcome, Guest</span>
+                <a href="cart.html" class="cart-icon">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="main.html">Home</a> > About
+        </div>
+        
+        <div class="form-container">
+            <h1>About TechShop</h1>
+            <p style="margin-bottom: 2rem; line-height: 1.8; font-size: 1.1rem;">
+                TechShop has been serving technology enthusiasts for over 10 years. We pride ourselves on offering 
+                the latest electronics at competitive prices with exceptional customer service.
+            </p>
+            <p style="margin-bottom: 2rem; line-height: 1.8; font-size: 1.1rem;">
+                Our mission is to make cutting-edge technology accessible to everyone. From smartphones to laptops, 
+                we carefully curate our product selection to ensure quality and value.
+            </p>
+            
+            <h2>Our Story</h2>
+            <p style="margin-bottom: 2rem; line-height: 1.8;">
+                Founded in 2014 by a group of tech enthusiasts, TechShop started as a small online retailer with a 
+                simple vision: to provide high-quality electronics at affordable prices. Over the years, we've grown 
+                into one of the most trusted names in online electronics retail, serving customers worldwide.
+            </p>
+            
+            <h2>Our Values</h2>
+            <ul style="margin-bottom: 2rem; padding-left: 2rem;">
+                <li style="margin-bottom: 0.5rem;"><strong>Quality First:</strong> We only stock products that meet our high standards.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Customer Service:</strong> Your satisfaction is our top priority.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Innovation:</strong> We stay ahead of the latest tech trends.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Affordability:</strong> Premium technology shouldn't break the bank.</li>
+            </ul>
+        </div>
+
+        <div class="form-container">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👨‍💼</div>
+                    <h3>John Smith</h3>
+                    <p><strong>CEO & Founder</strong></p>
+                    <p>Tech visionary with 15+ years of experience in the electronics industry.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👩‍💻</div>
+                    <h3>Sarah Johnson</h3>
+                    <p><strong>CTO</strong></p>
+                    <p>Former Silicon Valley engineer passionate about bringing the latest tech to everyone.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👨‍🔧</div>
+                    <h3>Mike Wilson</h3>
+                    <p><strong>Head of Customer Service</strong></p>
+                    <p>Dedicated to ensuring every customer has an exceptional experience with us.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👩‍📊</div>
+                    <h3>Emily Davis</h3>
+                    <p><strong>Marketing Director</strong></p>
+                    <p>Creative strategist focused on connecting customers with their perfect tech solutions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h2>Leave us a message!</h2>
+            <div class="form-group">
+                <label for="customerName">Your Name:</label>
+                <input type="text" id="customerName" class="form-control" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="customerMessage">Message:</label>
+                <textarea id="customerMessage" class="form-control" rows="4" placeholder="Tell us what you think about our store!"></textarea>
+            </div>
+            <button class="btn" onclick="submitMessage()">Submit Message</button>
+            
+            <div id="messageResult"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div>
+            <p>&copy; 2024 TechShop. All rights reserved.</p>
+            <p>Follow us on social media for the latest updates!</p>
+        </div>
+    </footer>
+
+    <script>
+        function submitMessage() {
+            const name = document.getElementById('customerName').value.trim();
+            const message = document.getElementById('customerMessage').value.trim();
+            
+            if (name && message) {
+                const resultDiv = document.getElementById('messageResult');
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h4>Thank you, ${name}!</h4>
+                        <p>Your message has been received successfully!</p>
+                        <p>We'll get back to you within 24 hours.</p>
+                    </div>
+                `;
+                
+                document.getElementById('customerName').value = '';
+                document.getElementById('customerMessage').value = '';
+            } else {
+                alert('Please fill in both fields!');
+            }
+        }
+
+        // Load cart count from localStorage
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        updateCartCount();
+    </script>
+</body>
+</html>
