@@ -1,1 +1,448 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Premium Electronics Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin: 5px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 3rem;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #343a40;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #6c757d;
+        }
+
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="main.html" style="color: white; text-decoration: none;">📱 TechShop</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="main.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="user-info">
+                <span id="currentUser">Welcome, Guest</span>
+                <a href="cart.html" class="cart-icon">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Premium Electronics Store</h1>
+                <p>Discover the latest technology at unbeatable prices</p>
+                <a href="products.html" class="btn">Shop Now</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">50K+</div>
+                <div>Happy Customers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1000+</div>
+                <div>Products</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div>Support</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Free</div>
+                <div>Shipping</div>
+            </div>
+        </div>
+
+        <h2>Featured Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">📱</div>
+                <div class="product-info">
+                    <div class="product-title">iPhone 15 Pro</div>
+                    <div class="product-price">$999.99</div>
+                    <button class="btn btn-success" onclick="addToCart('iPhone 15 Pro', 999.99)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">💻</div>
+                <div class="product-info">
+                    <div class="product-title">MacBook Air M3</div>
+                    <div class="product-price">$1,199.99</div>
+                    <button class="btn btn-success" onclick="addToCart('MacBook Air M3', 1199.99)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">🎧</div>
+                <div class="product-info">
+                    <div class="product-title">AirPods Pro</div>
+                    <div class="product-price">$249.99</div>
+                    <button class="btn btn-success" onclick="addToCart('AirPods Pro', 249.99)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" style="margin-top: 4rem;">
+            <div class="form-container">
+                <h1>About TechShop</h1>
+                <p style="margin-bottom: 2rem; line-height: 1.8;">
+                    TechShop has been serving technology enthusiasts for over 10 years. We pride ourselves on offering 
+                    the latest electronics at competitive prices with exceptional customer service.
+                </p>
+                <p style="margin-bottom: 2rem; line-height: 1.8;">
+                    Our mission is to make cutting-edge technology accessible to everyone. From smartphones to laptops, 
+                    we carefully curate our product selection to ensure quality and value.
+                </p>
+                
+                <h2>Leave us a message!</h2>
+                <div class="form-group">
+                    <label for="customerName">Your Name:</label>
+                    <input type="text" id="customerName" class="form-control" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="customerMessage">Message:</label>
+                    <textarea id="customerMessage" class="form-control" rows="4" placeholder="Tell us what you think about our store!"></textarea>
+                </div>
+                <button class="btn" onclick="submitMessage()">Submit Message</button>
+                
+                <div id="messageResult"></div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact">
+            <div class="form-container">
+                <h1>Contact Us</h1>
+                <div style="margin-bottom: 2rem;">
+                    <h3>📍 Address</h3>
+                    <p>123 Tech Street, Silicon Valley, CA 94105</p>
+                    
+                    <h3>📞 Phone</h3>
+                    <p>+1 (555) 123-4567</p>
+                    
+                    <h3>📧 Email</h3>
+                    <p>support@techshop.com</p>
+                    
+                    <h3>🕒 Business Hours</h3>
+                    <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                    Saturday - Sunday: 10:00 AM - 4:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div>
+            <p>&copy; 2024 TechShop. All rights reserved.</p>
+            <p>Follow us on social media for the latest updates!</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize cart count on page load
+        updateCartCount();
+
+        function addToCart(productName, price) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.push({name: productName, price: price});
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert(productName + ' added to cart!');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function submitMessage() {
+            const name = document.getElementById('customerName').value.trim();
+            const message = document.getElementById('customerMessage').value.trim();
+            
+            if (name && message) {
+                const resultDiv = document.getElementById('messageResult');
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h4>Thank you, ${name}!</h4>
+                        <p>Your message has been received successfully!</p>
+                        <p>We'll get back to you within 24 hours.</p>
+                    </div>
+                `;
+                
+                document.getElementById('customerName').value = '';
+                document.getElementById('customerMessage').value = '';
+            } else {
+                alert('Please fill in both fields!');
+            }
+        }
+    </script>
+</body>
+</html>
