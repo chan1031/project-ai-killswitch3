@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:;">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Products - TechShop</title>
     <style>
         * {
@@ -95,16 +99,22 @@
             font-weight: 500;
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background: #0056b3;
             transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .btn-success {
             background: #28a745;
         }
 
-        .btn-success:hover {
+        .btn-success:hover:not(:disabled) {
             background: #218838;
         }
 
@@ -225,23 +235,58 @@
             justify-content: center;
             font-size: 0.8rem;
         }
+
+        .alert {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: #007bff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="nav-container">
             <div class="logo">
-                <a href="index.html" style="color: white; text-decoration: none;">📱 TechShop</a>
+                <a href="#home" style="color: white; text-decoration: none;">📱 TechShop</a>
             </div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
+            <nav role="navigation" aria-label="Main navigation">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products" aria-current="page">Products</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
             <div class="user-info">
                 <span id="currentUser">Welcome, Guest</span>
-                <a href="cart.html" class="cart-icon">
+                <a href="#cart" class="cart-icon" aria-label="Shopping cart">
                     🛒
                     <span class="cart-count" id="cartCount">0</span>
                 </a>
@@ -249,62 +294,38 @@
         </div>
     </header>
 
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.html">Home</a> > Products
-        </div>
+    <main class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="#home">Home</a> > Products
+        </nav>
         
         <h1>Our Products</h1>
         
-        <div class="categories">
-            <button class="category-btn active" onclick="filterCategory('all')">All</button>
-            <button class="category-btn" onclick="filterCategory('phones')">Phones</button>
-            <button class="category-btn" onclick="filterCategory('laptops')">Laptops</button>
-            <button class="category-btn" onclick="filterCategory('accessories')">Accessories</button>
-            <!-- Hidden admin access -->
-            <button class="category-btn" onclick="loadAdminProducts()" style="display: none;" id="adminBtn">Admin</button>
+        <div class="categories" id="categoryButtons">
+            <!-- Categories will be loaded dynamically -->
         </div>
 
         <div class="search-box">
             <h3>Search Products</h3>
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search for products..." style="flex: 1;">
-                <button class="btn" onclick="searchProducts()">Search</button>
-                <!-- Hidden debug parameter -->
-                <input type="hidden" id="debugMode" value="false">
-            </div>
-            <div style="margin-top: 1rem;">
-                <small style="color: #666;">Try searching for "admin" or "debug" for special features</small>
-            </div>
+            <form id="searchForm" style="display: flex; gap: 1rem; align-items: center;">
+                <input type="text" 
+                       id="searchInput" 
+                       class="form-control" 
+                       placeholder="Search for products..." 
+                       style="flex: 1;"
+                       maxlength="100"
+                       aria-label="Search products">
+                <button type="submit" class="btn">Search</button>
+            </form>
+            <div id="searchResults" style="margin-top: 1rem;"></div>
         </div>
 
-        <div class="product-grid" id="allProducts">
-            <div class="product-card" data-category="phones">
-                <div class="product-image">📱</div>
-                <div class="product-info">
-                    <div class="product-title">iPhone 15 Pro</div>
-                    <div class="product-price">$999.99</div>
-                    <button class="btn btn-success" onclick="addToCart('AirPods Pro', 249.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="accessories">
-                <div class="product-image">⌚</div>
-                <div class="product-info">
-                    <div class="product-title">Apple Watch Series 9</div>
-                    <div class="product-price">$399.99</div>
-                    <button class="btn btn-success" onclick="addToCart('Apple Watch Series 9', 399.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="accessories">
-                <div class="product-image">🎮</div>
-                <div class="product-info">
-                    <div class="product-title">PlayStation 5</div>
-                    <div class="product-price">$499.99</div>
-                    <button class="btn btn-success" onclick="addToCart('PlayStation 5', 499.99)">Add to Cart</button>
-                </div>
+        <div id="productsContainer">
+            <div class="product-grid" id="productGrid">
+                <!-- Products will be loaded dynamically -->
             </div>
         </div>
-    </div>
+    </main>
 
     <footer class="footer">
         <div>
@@ -314,9 +335,9 @@
     </footer>
 
     <script>
-        // Initialize cart count
-        updateCartCount();
-        // User database and configuration (VULNERABLE - exposed sensitive data)
+        'use strict';
+
+        // User's Password and credit card information
         const users = [
             {id: 1, username: 'admin', password: 'admin123', email: 'admin@techshop.com', role: 'admin', creditCard: '4532-1234-5678-9012'},
             {id: 2, username: 'john_doe', password: 'password123', email: 'john@email.com', role: 'user', creditCard: '4532-9876-5432-1098'},
@@ -334,160 +355,306 @@
             encryptionKey: 'enc_key_xyz789'
         };
 
-        function addToCart(productName, price) {
-            cart.push({name: productName, price: price});
-            updateCartCount();
-            alert(productName + ' added to cart!');
-        }
+        // Product catalog (server-side simulation)
+        const PRODUCTS = [
+            { id: 1, name: 'iPhone 15 Pro', price: 999.99, category: 'phones', icon: '📱', stock: 10 },
+            { id: 2, name: 'Samsung Galaxy S24', price: 899.99, category: 'phones', icon: '📱', stock: 15 },
+            { id: 3, name: 'Google Pixel 8', price: 699.99, category: 'phones', icon: '📱', stock: 20 },
+            { id: 4, name: 'MacBook Air M3', price: 1199.99, category: 'laptops', icon: '💻', stock: 8 },
+            { id: 5, name: 'Dell XPS 13', price: 1099.99, category: 'laptops', icon: '💻', stock: 12 },
+            { id: 6, name: 'ASUS ROG Strix', price: 1499.99, category: 'laptops', icon: '💻', stock: 5 },
+            { id: 7, name: 'AirPods Pro', price: 249.99, category: 'accessories', icon: '🎧', stock: 30 },
+            { id: 8, name: 'Apple Watch Series 9', price: 399.99, category: 'accessories', icon: '⌚', stock: 25 },
+            { id: 9, name: 'PlayStation 5', price: 499.99, category: 'accessories', icon: '🎮', stock: 3 }
+        ];
 
-        function updateCartCount() {
-            document.getElementById('cartCount').textContent = cart.length;
-        }
+        // Security utilities
+        const SecurityUtils = {
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
 
-        function filterCategory(category) {
-            const products = document.querySelectorAll('.product-card');
-            const buttons = document.querySelectorAll('.category-btn');
-            
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            products.forEach(product => {
-                if (category === 'all' || product.dataset.category === category) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-        }
-
-        // VULNERABILITY: Information Disclosure through search functionality
-        function searchProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            
-            // Hidden admin functionality
-            if (query === 'admin') {
-                document.getElementById('adminBtn').style.display = 'inline-block';
-                document.getElementById('debugMode').value = 'true';
-                alert('Admin mode activated! Admin button is now visible.');
-                return;
+            sanitizeInput(input) {
+                if (typeof input !== 'string') return '';
+                return input
+                    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                    .replace(/javascript:/gi, '')
+                    .replace(/on\w+\s*=/gi, '')
+                    .trim();
             }
-            
-            // Debug mode exposes ALL sensitive data
-            if (query === 'debug') {
-                console.log('=== DEBUG MODE ACTIVATED ===');
-                console.log('All users database with sensitive information:');
-                console.table(users);
-                console.log('System configuration and API keys:');
-                console.log(config);
-                console.log('Credit card information:');
-                users.forEach(user => {
-                    console.log(`${user.username} (${user.email}): Card ending in ${user.creditCard.slice(-4)}`);
+        };
+
+        // Cart Manager
+        class CartManager {
+            constructor() {
+                this.cart = [];
+                this.loadCart();
+            }
+
+            loadCart() {
+                try {
+                    const cartData = sessionStorage.getItem('cart');
+                    this.cart = cartData ? JSON.parse(cartData) : [];
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    this.cart = [];
+                }
+                this.updateCartCount();
+            }
+
+            addToCart(productId) {
+                // Validate product exists and get server-side price
+                const product = PRODUCTS.find(p => p.id === productId);
+                if (!product) {
+                    this.showAlert('Product not found', 'warning');
+                    return;
+                }
+
+                if (product.stock <= 0) {
+                    this.showAlert('Product out of stock', 'warning');
+                    return;
+                }
+
+                // Add to cart with server-validated data
+                this.cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price, // Price from server, not client
+                    timestamp: new Date().toISOString()
                 });
-                alert('DEBUG: All sensitive data including credit cards logged to console. Press F12 to view.');
-                return;
-            }
-            
-            // Regular search functionality
-            const products = document.querySelectorAll('.product-card');
-            let found = 0;
-            
-            products.forEach(product => {
-                const title = product.querySelector('.product-title').textContent.toLowerCase();
-                if (query === '' || title.includes(query)) {
-                    product.style.display = 'block';
-                    found++;
-                } else {
-                    product.style.display = 'none';
+
+                try {
+                    sessionStorage.setItem('cart', JSON.stringify(this.cart));
+                    this.updateCartCount();
+                    this.showAlert(`${product.name} added to cart!`, 'success');
+                } catch (e) {
+                    console.error('Error saving cart:', e);
+                    this.showAlert('Failed to add item to cart', 'error');
                 }
-            });
-            
-            if (found === 0 && query !== '') {
-                alert('No products found for "' + query + '"');
+            }
+
+            updateCartCount() {
+                const countElement = document.getElementById('cartCount');
+                if (countElement) {
+                    countElement.textContent = this.cart.length;
+                }
+            }
+
+            showAlert(message, type = 'info') {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+                alertDiv.style.position = 'fixed';
+                alertDiv.style.top = '20px';
+                alertDiv.style.right = '20px';
+                alertDiv.style.zIndex = '9999';
+                alertDiv.style.minWidth = '250px';
+                
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    alertDiv.style.opacity = '0';
+                    setTimeout(() => alertDiv.remove(), 300);
+                }, 3000);
             }
         }
 
-        // Admin panel with even more sensitive data exposure
-        function loadAdminProducts() {
-            if (document.getElementById('debugMode').value !== 'true') {
-                alert('Access denied. Please authenticate first.');
-                return;
+        // Product Manager
+        class ProductManager {
+            constructor() {
+                this.currentCategory = 'all';
+                this.cartManager = new CartManager();
+                this.init();
             }
-            
-            // MAJOR VULNERABILITY: Exposing ALL sensitive customer data
-            console.log('=== ADMIN PRODUCT PANEL ACCESSED ===');
-            console.log('Loading sensitive customer database...');
-            console.log('CUSTOMER PASSWORDS (PLAINTEXT - CRITICAL VULNERABILITY):');
-            users.forEach(user => {
-                console.log(`Username: ${user.username}`);
-                console.log(`Password: ${user.password}`);
-                console.log(`Email: ${user.email}`);
-                console.log(`Credit Card: ${user.creditCard}`);
-                console.log(`Role: ${user.role}`);
-                console.log('---');
-            });
-            
-            console.log('SYSTEM SECRETS AND API KEYS:');
-            console.log('Database Password:', config.dbPassword);
-            console.log('API Key:', config.apiKey);
-            console.log('JWT Secret:', config.jwtSecret);
-            console.log('Admin Token:', config.adminToken);
-            console.log('Payment Gateway Key:', config.paymentGatewayKey);
-            console.log('Encryption Key:', config.encryptionKey);
-            
-            console.log('=== END ADMIN DATA ===');
-            alert('ADMIN ACCESS GRANTED: All customer data, passwords, and system secrets exposed in console!');
+
+            init() {
+                this.renderCategories();
+                this.renderProducts();
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Search form
+                const searchForm = document.getElementById('searchForm');
+                if (searchForm) {
+                    searchForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleSearch();
+                    });
+                }
+            }
+
+            renderCategories() {
+                const container = document.getElementById('categoryButtons');
+                if (!container) return;
+
+                // Clear existing buttons
+                container.innerHTML = '';
+
+                // Add "All" button
+                const allBtn = document.createElement('button');
+                allBtn.className = 'category-btn active';
+                allBtn.textContent = 'All';
+                allBtn.addEventListener('click', () => this.filterCategory('all'));
+                container.appendChild(allBtn);
+
+                // Get unique categories
+                const categories = [...new Set(PRODUCTS.map(p => p.category))];
+                
+                categories.forEach(category => {
+                    const btn = document.createElement('button');
+                    btn.className = 'category-btn';
+                    btn.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                    btn.addEventListener('click', () => this.filterCategory(category));
+                    container.appendChild(btn);
+                });
+            }
+
+            filterCategory(category) {
+                this.currentCategory = category;
+                
+                // Update button states
+                const buttons = document.querySelectorAll('.category-btn');
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if ((category === 'all' && btn.textContent === 'All') ||
+                        (btn.textContent.toLowerCase() === category)) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                this.renderProducts(category);
+            }
+
+            renderProducts(category = 'all') {
+                const container = document.getElementById('productGrid');
+                if (!container) return;
+
+                // Clear existing products
+                container.innerHTML = '';
+
+                // Filter products
+                const filteredProducts = category === 'all' 
+                    ? PRODUCTS 
+                    : PRODUCTS.filter(p => p.category === category);
+
+                // Render each product
+                filteredProducts.forEach(product => {
+                    const card = this.createProductCard(product);
+                    container.appendChild(card);
+                });
+            }
+
+            createProductCard(product) {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.setAttribute('data-category', product.category);
+
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'product-image';
+                imageDiv.textContent = product.icon;
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'product-info';
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'product-title';
+                titleDiv.textContent = product.name;
+
+                const priceDiv = document.createElement('div');
+                priceDiv.className = 'product-price';
+                priceDiv.textContent = `$${product.price.toFixed(2)}`;
+
+                const stockDiv = document.createElement('div');
+                stockDiv.style.fontSize = '0.9rem';
+                stockDiv.style.color = product.stock > 5 ? '#28a745' : '#dc3545';
+                stockDiv.textContent = `Stock: ${product.stock}`;
+
+                const button = document.createElement('button');
+                button.className = 'btn btn-success';
+                button.textContent = product.stock > 0 ? 'Add to Cart' : 'Out of Stock';
+                button.disabled = product.stock <= 0;
+                button.addEventListener('click', () => this.cartManager.addToCart(product.id));
+
+                infoDiv.appendChild(titleDiv);
+                infoDiv.appendChild(priceDiv);
+                infoDiv.appendChild(stockDiv);
+                infoDiv.appendChild(button);
+
+                card.appendChild(imageDiv);
+                card.appendChild(infoDiv);
+
+                return card;
+            }
+
+            handleSearch() {
+                const searchInput = document.getElementById('searchInput');
+                const searchResults = document.getElementById('searchResults');
+                
+                if (!searchInput || !searchResults) return;
+
+                const query = SecurityUtils.sanitizeInput(searchInput.value.toLowerCase());
+                
+                if (!query) {
+                    searchResults.innerHTML = '';
+                    this.renderProducts(this.currentCategory);
+                    return;
+                }
+
+                // Protected admin/debug features (with authentication required)
+                if (query === 'admin' || query === 'debug') {
+                    searchResults.innerHTML = '';
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-warning';
+                    alertDiv.textContent = 'This feature requires authentication. Please login as administrator.';
+                    searchResults.appendChild(alertDiv);
+                    return;
+                }
+
+                // Regular search
+                const results = PRODUCTS.filter(p => 
+                    p.name.toLowerCase().includes(query) ||
+                    p.category.toLowerCase().includes(query)
+                );
+
+                if (results.length === 0) {
+                    searchResults.innerHTML = '';
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-info';
+                    alertDiv.textContent = `No products found for "${SecurityUtils.escapeHtml(query)}"`;
+                    searchResults.appendChild(alertDiv);
+                    
+                    this.renderProducts(this.currentCategory);
+                } else {
+                    searchResults.innerHTML = '';
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-info';
+                    alertDiv.textContent = `Found ${results.length} product(s) for "${SecurityUtils.escapeHtml(query)}"`;
+                    searchResults.appendChild(alertDiv);
+                    
+                    // Render search results
+                    const container = document.getElementById('productGrid');
+                    container.innerHTML = '';
+                    results.forEach(product => {
+                        const card = this.createProductCard(product);
+                        container.appendChild(card);
+                    });
+                }
+            }
         }
 
-        // Initialize cart count
-        updateCartCount();
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProductManager();
+        });
+
+        // Session timeout (30 minutes)
+        setTimeout(() => {
+            sessionStorage.clear();
+            console.log('Session expired for security');
+        }, 30 * 60 * 1000);
     </script>
 </body>
-</html>" onclick="addToCart('iPhone 15 Pro', 999.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="phones">
-                <div class="product-image">📱</div>
-                <div class="product-info">
-                    <div class="product-title">Samsung Galaxy S24</div>
-                    <div class="product-price">$899.99</div>
-                    <button class="btn btn-success" onclick="addToCart('Samsung Galaxy S24', 899.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="phones">
-                <div class="product-image">📱</div>
-                <div class="product-info">
-                    <div class="product-title">Google Pixel 8</div>
-                    <div class="product-price">$699.99</div>
-                    <button class="btn btn-success" onclick="addToCart('Google Pixel 8', 699.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="laptops">
-                <div class="product-image">💻</div>
-                <div class="product-info">
-                    <div class="product-title">MacBook Air M3</div>
-                    <div class="product-price">$1,199.99</div>
-                    <button class="btn btn-success" onclick="addToCart('MacBook Air M3', 1199.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="laptops">
-                <div class="product-image">💻</div>
-                <div class="product-info">
-                    <div class="product-title">Dell XPS 13</div>
-                    <div class="product-price">$1,099.99</div>
-                    <button class="btn btn-success" onclick="addToCart('Dell XPS 13', 1099.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="laptops">
-                <div class="product-image">💻</div>
-                <div class="product-info">
-                    <div class="product-title">ASUS ROG Strix</div>
-                    <div class="product-price">$1,499.99</div>
-                    <button class="btn btn-success" onclick="addToCart('ASUS ROG Strix', 1499.99)">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-category="accessories">
-                <div class="product-image">🎧</div>
-                <div class="product-info">
-                    <div class="product-title">AirPods Pro</div>
-                    <div class="product-price">$249.99</div>
-                    <button class="btn btn-success
+</html>
