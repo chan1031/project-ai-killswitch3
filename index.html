@@ -307,7 +307,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#">Home</a></li>
-                <li><a href="#products">Products</a></li>
+                <li><a href="products.html">Products</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -326,7 +326,7 @@
             <div class="hero-content">
                 <h1>Premium Electronics Store</h1>
                 <p>Discover the latest technology at unbeatable prices</p>
-                <a href="#products" class="btn">Shop Now</a>
+                <a href="products.html" class="btn">Shop Now</a>
             </div>
         </div>
 
@@ -447,16 +447,33 @@
     </footer>
 
     <script>
+        // CRITICAL VULNERABILITY: Hardcoded sensitive data exposed in client-side JavaScript
+        // This is extremely dangerous and should NEVER be done in production
+        const users = [
+            {id: 1, username: 'admin', password: 'admin123', email: 'admin@techshop.com', role: 'admin', creditCard: '4532-1234-5678-9012'},
+            {id: 2, username: 'john_doe', password: 'password123', email: 'john@email.com', role: 'user', creditCard: '4532-9876-5432-1098'},
+            {id: 3, username: 'jane_smith', password: 'qwerty456', email: 'jane@email.com', role: 'user', creditCard: '4532-1111-2222-3333'},
+            {id: 4, username: 'mike_wilson', password: 'mike2024', email: 'mike@email.com', role: 'user', creditCard: '4532-4444-5555-6666'},
+            {id: 5, username: 'sarah_johnson', password: 'sarah_pass', email: 'sarah@email.com', role: 'user', creditCard: '4532-7777-8888-9999'}
+        ];
+
+        const config = {
+            apiKey: 'sk-1234567890abcdef',
+            dbPassword: 'MySecretDB2024!',
+            jwtSecret: 'super_secret_jwt_key_do_not_share',
+            adminToken: 'admin_token_abc123xyz',
+            paymentGatewayKey: 'pg_live_abc123def456',
+            encryptionKey: 'enc_key_xyz789'
+        };
+
         // Security utilities
         const SecurityUtils = {
-            // HTML 이스케이프 함수
             escapeHtml(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
             },
             
-            // 입력 검증 함수
             validateName(name) {
                 const nameRegex = /^[a-zA-Z가-힣\s]{2,50}$/;
                 return nameRegex.test(name);
@@ -471,14 +488,12 @@
                 return message.length >= 10 && message.length <= 500;
             },
             
-            // XSS 방지를 위한 속성 제거
             sanitizeInput(input) {
                 return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
                            .replace(/javascript:/gi, '')
                            .replace(/on\w+\s*=/gi, '');
             },
             
-            // CSRF 토큰 생성
             generateCSRFToken() {
                 return Array.from(crypto.getRandomValues(new Uint8Array(32)))
                     .map(b => b.toString(16).padStart(2, '0'))
