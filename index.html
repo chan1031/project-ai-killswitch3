@@ -486,14 +486,12 @@
             }
         };
 
-        // 제품 데이터 (서버에서 가져온다고 가정)
         const PRODUCTS = [
             { id: 1, name: 'iPhone 15 Pro', price: 999.99, emoji: '📱' },
             { id: 2, name: 'MacBook Air M3', price: 1199.99, emoji: '💻' },
             { id: 3, name: 'AirPods Pro', price: 249.99, emoji: '🎧' }
         ];
 
-        // 장바구니 관리 (세션 스토리지 사용)
         const CartManager = {
             getCart() {
                 try {
@@ -506,7 +504,6 @@
             },
             
             addToCart(productId) {
-                // 서버에서 제품 정보 확인 (실제로는 API 호출)
                 const product = PRODUCTS.find(p => p.id === productId);
                 if (!product) {
                     alert('Invalid product');
@@ -540,7 +537,6 @@
             }
         };
 
-        // 제품 렌더링
         function renderProducts() {
             const productGrid = document.getElementById('productGrid');
             if (!productGrid) return;
@@ -582,19 +578,16 @@
             });
         }
 
-        // 폼 처리
         function setupForm() {
             const form = document.getElementById('messageForm');
             const csrfToken = document.getElementById('csrfToken');
             const messageTextarea = document.getElementById('customerMessage');
             const charCount = document.getElementById('charCount');
             
-            // CSRF 토큰 설정
             if (csrfToken) {
                 csrfToken.value = SecurityUtils.generateCSRFToken();
             }
             
-            // 문자 수 카운터
             if (messageTextarea && charCount) {
                 messageTextarea.addEventListener('input', function() {
                     charCount.textContent = this.value.length;
@@ -610,25 +603,21 @@
         }
 
         function submitMessage() {
-            // 입력값 가져오기
             const nameInput = document.getElementById('customerName');
             const emailInput = document.getElementById('customerEmail');
             const messageInput = document.getElementById('customerMessage');
             const csrfToken = document.getElementById('csrfToken');
             
-            // 에러 메시지 초기화
             document.getElementById('nameError').textContent = '';
             document.getElementById('emailError').textContent = '';
             document.getElementById('messageError').textContent = '';
             
-            // 입력값 정제
             const name = SecurityUtils.sanitizeInput(nameInput.value.trim());
             const email = SecurityUtils.sanitizeInput(emailInput.value.trim());
             const message = SecurityUtils.sanitizeInput(messageInput.value.trim());
             
             let hasError = false;
             
-            // 검증
             if (!SecurityUtils.validateName(name)) {
                 document.getElementById('nameError').textContent = 
                     'Name must be 2-50 characters and contain only letters and spaces';
@@ -660,13 +649,11 @@
                 return;
             }
             
-            // CSRF 토큰 확인
             if (!csrfToken || !csrfToken.value) {
                 alert('Security token missing. Please refresh the page.');
                 return;
             }
             
-            // 버튼 상태 변경
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const btnLoader = document.getElementById('btnLoader');
@@ -675,11 +662,9 @@
             btnText.style.display = 'none';
             btnLoader.style.display = 'inline-block';
             
-            // 서버 전송 시뮬레이션
             setTimeout(() => {
                 const resultDiv = document.getElementById('messageResult');
                 
-                // 안전하게 결과 표시 (DOM 조작 사용)
                 resultDiv.innerHTML = '';
                 
                 const alertDiv = document.createElement('div');
@@ -700,16 +685,13 @@
                 
                 resultDiv.appendChild(alertDiv);
                 
-                // 폼 초기화
                 nameInput.value = '';
                 emailInput.value = '';
                 messageInput.value = '';
                 document.getElementById('charCount').textContent = '0';
                 
-                // 새 CSRF 토큰 생성
                 csrfToken.value = SecurityUtils.generateCSRFToken();
                 
-                // 버튼 상태 복원
                 submitBtn.disabled = false;
                 btnText.style.display = 'inline';
                 btnLoader.style.display = 'none';
